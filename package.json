@@ -6,12 +6,7 @@
   "main": "index.js",
   "scripts": {
     "dev": "nodemon src/index.js",
-    "get-all": "node src/scripts/getAllContacts",
-    "generate": "node src/scripts/generateContacts.js",
-    "add-one": "node src/scripts/addOneContact.js",
-    "count": "node src/scripts/countContacts.js",
-    "thanos": "node src/scripts/thanos.js",
-    "remove-all": "node src/scripts/removeAllContacts.js"
+"start": "node src/index.js"
   },
   "keywords": [],
   "author": "",
