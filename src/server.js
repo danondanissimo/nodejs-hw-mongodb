@@ -31,35 +31,34 @@ export const setupServer = () => {
     }
   });
 
-  app.get('/contacts/:contactId', async (req, res, next) => {
+  app.get('/contacts/:contactId', async (req, res) => {
     try {
       const { contactId } = req.params;
       const contact = await getContactById(contactId);
 
       if (!contact) {
-        res.status(404).json({
+        return res.status(404).json({
           status: 404,
-          message: `Successfully found contact with id ${contactId}!`,
+          message: `Failed to find contact with id ${contactId}!`,
         });
-      } else {
-        res.json({ status: 200, data: contact });
       }
+      res.json({
+        status: 200,
+        data: contact,
+        message: `Successfully found contact with id ${contactId}`,
+      });
     } catch (err) {
-      next(err);
+      console.error('Error occurred:', err);
+      return res.status(500).json({
+        status: 500,
+        error: 'Internal Server Error',
+        message: 'An unexpected error occurred while processing the request.',
+      });
     }
   });
 
   app.use('*', (req, res) => {
     res.status(404).json({ message: 'Not found', status: 404 });
-  });
-
-  app.use((err, req, res, next) => {
-    console.error(err.stack);
-    res.status(500).json({
-      status: 500,
-      message: 'Internal Server Error',
-      error: err.message,
-    });
   });
 
   app.listen(PORT, () => {
