@@ -45,13 +45,22 @@ export const getContactsByIdController = async (req, res, next) => {
 };
 
 export const createContactController = async (req, res) => {
-  const contact = await createContact(req.body);
+  try {
+    const contact = await createContact(req.body);
 
-  res.status(201).json({
-    status: 201,
-    message: `Successfully created a contact!`,
-    data: contact,
-  });
+    res.status(201).json({
+      status: 201,
+      message: `Successfully created a contact!`,
+      data: contact,
+    });
+  } catch (err) {
+    console.error('Error occurred:', err);
+    return res.status(500).json({
+      status: 500,
+      error: 'Internal Server Error',
+      message: 'An unexpected error occurred while processing the request.',
+    });
+  }
 };
 
 export const deleteContactController = async (req, res, next) => {
@@ -90,16 +99,26 @@ export const upsertContactController = async (req, res, next) => {
 
 export const patchContactController = async (req, res, next) => {
   const { contactId } = req.params;
-  const result = await updateContact(contactId, req.body);
 
-  if (!result) {
-    next(createHttpError(404, 'Contact not found'));
-    return;
+  try {
+    const result = await updateContact(contactId, req.body);
+
+    if (!result) {
+      next(createHttpError(404, 'Contact not found'));
+      return;
+    }
+
+    res.json({
+      status: 200,
+      message: `Successfully patched a contact!`,
+      data: result.contact,
+    });
+  } catch (err) {
+    console.error('Error occurred:', err);
+    return res.status(500).json({
+      status: 500,
+      error: 'Internal Server Error',
+      message: 'An unexpected error occurred while processing the request.',
+    });
   }
-
-  res.json({
-    status: 200,
-    message: `Successfully patched a contact!`,
-    data: result.contact,
-  });
 };
