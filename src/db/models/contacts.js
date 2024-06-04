@@ -6,17 +6,17 @@ const contactsSchema = new Schema(
       type: String,
       required: true,
     },
-    phoneNumber: {
-      type: Number,
-      required: true,
-    },
     email: {
       type: String,
       required: false,
     },
+    phoneNumber: {
+      type: Number,
+      required: true,
+    },
 
     isFavourite: {
-      type: String,
+      type: Boolean,
       required: false,
     },
     contactType: {
