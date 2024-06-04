@@ -8,20 +8,20 @@ const contactsSchema = new Schema(
     },
     email: {
       type: String,
-      required: false,
+      optional: true,
     },
     phoneNumber: {
-      type: Number,
+      type: String,
       required: true,
     },
 
     isFavourite: {
       type: Boolean,
-      required: false,
+      optional: true,
     },
     contactType: {
       type: String,
-      required: false,
+      optional: true,
     },
   },
   {
