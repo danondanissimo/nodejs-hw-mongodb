@@ -3,7 +3,10 @@ import pino from 'pino-http';
 import cors from 'cors';
 
 import { env } from './utils/env.js';
-import { getAllContacts, getContactById } from './services/contacts.js';
+
+import router from './routers/contacts.js';
+import { notFoundHandler } from './middlewares/notFoundHandler.js';
+import { errorHandler } from './middlewares/errorHandlers.js';
 
 const PORT = Number(env('PORT', '3000'));
 
@@ -18,48 +21,11 @@ export const setupServer = () => {
     res.json({ message: 'Hello World!' });
   });
 
-  app.get('/contacts', async (req, res, next) => {
-    try {
-      const contacts = await getAllContacts();
-      res.json({
-        status: 200,
-        message: 'Successfully found contacts!',
-        data: contacts,
-      });
-    } catch (err) {
-      next(err);
-    }
-  });
+  app.use(router);
 
-  app.get('/contacts/:contactId', async (req, res) => {
-    try {
-      const { contactId } = req.params;
-      const contact = await getContactById(contactId);
+  app.use('*', notFoundHandler);
 
-      if (!contact) {
-        return res.status(404).json({
-          status: 404,
-          message: `Failed to find contact with id ${contactId}!`,
-        });
-      }
-      res.json({
-        status: 200,
-        data: contact,
-        message: `Successfully found contact with id ${contactId}`,
-      });
-    } catch (err) {
-      console.error('Error occurred:', err);
-      return res.status(500).json({
-        status: 500,
-        error: 'Internal Server Error',
-        message: 'An unexpected error occurred while processing the request.',
-      });
-    }
-  });
-
-  app.use('*', (req, res) => {
-    res.status(404).json({ message: 'Not found', status: 404 });
-  });
+  app.use(errorHandler);
 
   app.listen(PORT, () => {
     console.log(`Server is running on port ${PORT}`);
