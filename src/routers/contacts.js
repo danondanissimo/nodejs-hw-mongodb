@@ -11,8 +11,11 @@ import { ctrlWrapper } from '../utils/ctrlWrapper.js';
 import { validateBody } from '../middlewares/validateBody.js';
 import { createContactSchema } from '../validation/createContactSchema.js';
 import { updateContactSchema } from '../validation/updateContactSchema.js';
+import { validateMongoId } from '../validation/validateMongoId.js';
 
 const router = Router();
+
+router.use('/contacts/:contactId', validateMongoId('contactId'));
 
 router.get('/contacts', ctrlWrapper(getContactsController));
 
