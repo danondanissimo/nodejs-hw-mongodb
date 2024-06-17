@@ -40,12 +40,15 @@ export const loginUserController = async (req, res) => {
 export const logoutUserController = async (req, res) => {
   if (req.cookies.sessionId) {
     await logoutUser(req.cookies.sessionId);
+    res.status(204).send();
+    res.clearCookie('sessionId');
+    res.clearCookie('refreshToken');
+  } else {
+    res.json({
+      status: 404,
+      message: 'Not logged in',
+    });
   }
-
-  res.clearCookie('sessionId');
-  res.clearCookie('refreshToken');
-
-  res.status(204).send();
 };
 
 const setupSession = (res, session) => {

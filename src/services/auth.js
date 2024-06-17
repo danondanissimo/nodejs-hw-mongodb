@@ -43,6 +43,14 @@ export const loginUser = async (payload) => {
 };
 
 export const logoutUser = async (sessionId) => {
+  const existingSession = await SessionsCollection.findOne({
+    _id: sessionId,
+  });
+
+  if (!existingSession) {
+    throw createHttpError(404, 'Session not found');
+  }
+
   await SessionsCollection.deleteOne({ _id: sessionId });
 };
 

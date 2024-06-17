@@ -1,6 +1,7 @@
 import { ContactsCollection } from '../db/models/contacts.js';
 import { calculatePaginationData } from '../utils/calculatePaginationData.js';
 import { SORT_ORDER } from '../constants/index.js';
+import { ObjectId } from 'mongodb';
 
 export const getAllContacts = async ({
   page = 1,
@@ -48,7 +49,7 @@ export const createContact = async (payload) => {
 // };
 
 export const deleteContact = async (contactId, userId) => {
-  const contact = await ContactsCollection.findByIdAndDelete({
+  const contact = await ContactsCollection.findOneAndDelete({
     _id: contactId,
     userId,
   });
@@ -61,7 +62,7 @@ export const updateContact = async (
   userId,
   options = {},
 ) => {
-  const rawResult = await ContactsCollection.findByIdAndUpdate(
+  const rawResult = await ContactsCollection.findByOneAndUpdate(
     { _id: contactId, userId },
     payload,
     {
