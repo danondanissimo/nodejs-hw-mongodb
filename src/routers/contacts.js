@@ -13,6 +13,7 @@ import { createContactSchema } from '../validation/createContactSchema.js';
 import { updateContactSchema } from '../validation/updateContactSchema.js';
 import { validateMongoId } from '../validation/validateMongoId.js';
 import { authenticate } from '../middlewares/authenticate.js';
+import { upload } from '../middlewares/multer.js';
 
 const contactsRouter = Router();
 
@@ -26,16 +27,22 @@ contactsRouter.get('/:contactId', ctrlWrapper(getContactsByIdController));
 
 contactsRouter.post(
   '/',
+  upload.single('photo'),
   validateBody(createContactSchema),
   ctrlWrapper(createContactController),
 );
 
 contactsRouter.delete('/:contactId', ctrlWrapper(deleteContactController));
 
-contactsRouter.put('/:contactId', ctrlWrapper(upsertContactController));
+contactsRouter.put(
+  '/:contactId',
+  upload.single('photo'),
+  ctrlWrapper(upsertContactController),
+);
 
 contactsRouter.patch(
   '/:contactId',
+  upload.single('photo'),
   validateBody(updateContactSchema),
   ctrlWrapper(patchContactController),
 );

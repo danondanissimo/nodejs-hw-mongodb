@@ -33,10 +33,20 @@ export const getContactById = async (contactId, userId) => {
 };
 
 export const createContact = async (payload) => {
-  const contactData = { ...payload, userId: payload.userId };
+  const contactData = {
+    userId: payload.userId,
+    ...payload,
+    photo: payload.photo,
+  };
   const contact = await ContactsCollection.create(contactData);
   return contact;
 };
+
+// export const createContact = async ({ photo, ...payload }, userId) => {
+//   const contactData = { ...payload, userId: userId, photo: photo };
+//   const contact = await ContactsCollection.create(contactData);
+//   return contact;
+// };
 
 export const deleteContact = async (contactId, userId) => {
   const contact = await ContactsCollection.findOneAndDelete({
