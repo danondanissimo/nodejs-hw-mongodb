@@ -2,8 +2,9 @@ import { OAuth2Client } from 'google-auth-library';
 import path from 'node:path';
 import { readFile } from 'fs/promises';
 
-import { ENV_VARS, env } from './env';
+import { env } from '../utils/env.js';
 import createHttpError from 'http-errors';
+import { ENV_VARS } from '../constants/index.js';
 
 const PATH_JSON = path.join(process.cwd(), 'google-oauth.json');
 
