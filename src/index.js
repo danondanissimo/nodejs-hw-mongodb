@@ -11,6 +11,9 @@ import cors from 'cors';
 
 import dotenv from 'dotenv';
 
+import { TEMP_UPLOAD_DIR, UPLOAD_DIR } from './constants/index.js';
+import { createDirIfNotExists } from './utils/createDirIfNotExist.js';
+
 dotenv.config();
 
 const app = express();
@@ -43,6 +46,8 @@ app.use(cors());
 
 const bootstrap = async () => {
   await initMongoConnection();
+  await createDirIfNotExists(TEMP_UPLOAD_DIR);
+  await createDirIfNotExists(UPLOAD_DIR);
   setupServer();
 };
 
